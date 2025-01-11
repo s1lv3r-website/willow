@@ -1,0 +1,27 @@
+[build]
+  command = "pnpm run build"
+  publish = "build"
+  environment = { NODE_VERSION = "20.10.0" }
+
+[build.processing]
+  skip_processing = false
+
+[build.processing.css]
+  bundle = false
+  minify = true
+
+[build.processing.js]
+  bundle = false
+  minify = true
+
+[build.processing.html]
+  pretty_urls = false
+
+[build.processing.images]
+  compress = true
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Permissions-Policy = "interest-cohort=()"
+    Access-Control-Allow-Origin = "*"

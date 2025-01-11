@@ -8,6 +8,7 @@
   import Throne from '$lib/components/svgs/throne.svelte';
   import QRCode from 'qrcode';
   import type { Component } from 'svelte';
+  import { Clipboard } from 'lucide-svelte';
 
   type ActiveSite = {
     title: string;
@@ -92,12 +93,16 @@
 
   let openCurrency = $state<number | null>(0);
 
+  function toggleOpen(index: number) {
+    openCurrency === index ? (openCurrency = null) : (openCurrency = index);
+  }
+
   function formatAddress(address: string, splitSize = 4, beforeParts = 2, afterParts = 3): string {
     const parts = chunkString(address, splitSize);
     let output = '';
 
     if (beforeParts + afterParts >= parts.length) {
-      return parts.join(' ')
+      return parts.join(' ');
     }
 
     for (let i = 0; i < beforeParts; i++) {
@@ -125,10 +130,7 @@
         title={site.active ? site.title : site.placeholder}
         target="_blank"
         rel="noopener noreferrer"
-        class={[
-          'container-box',
-          { 'brightness-75 hover:cursor-not-allowed': !site.active },
-        ]}
+        class={['container-box', { 'brightness-75 hover:cursor-not-allowed': !site.active }]}
       >
         <h3>
           <span class="inline-block w-6 p-[2px] align-middle">
@@ -141,19 +143,19 @@
   </div>
 
   <h2>Crypto</h2>
-  <div class="grid grid-cols-1 gap-4 px-5 md:grid-cols-2">
+  <div class="grid grid-cols-2 gap-4 px-5 md:grid-cols-2">
     {#each cryptoCurrencies as currency, index}
       {@const open = openCurrency === index}
-      <button
-        onclick={() => (open ? (openCurrency = null) : (openCurrency = index))}
-        class={[
-          'container-box',
-          { 'md:col-start-1 md:col-end-3': open },
-        ]}
+      <div
+        onclick={() => toggleOpen(index)}
+        onkeyup={() => {}}
+        role="button"
+        tabindex={index}
+        class={['container-box relative text-center', { 'md:col-start-1 md:col-end-3': open }]}
       >
         <h3>{currency.name}</h3>
         {#if currency.notes}
-          <p>{currency.notes}</p>
+          <p class="text-neutral-400">{currency.notes}</p>
         {/if}
         {#if open}
           <div class="flex w-full flex-row justify-center p-3">
@@ -165,13 +167,21 @@
         <code class="rounded-md bg-neutral-900 px-2 py-1">
           {open ? chunkString(currency.address, 4).join(' ') : formatAddress(currency.address)}
         </code>
-      </button>
+        <Clipboard
+          onclick={(e) => {
+            navigator.clipboard.writeText(currency.address);
+            alert(`Copied address for ${currency.name} to clipboard.`);
+            e.stopPropagation();
+          }}
+          class="absolute right-3.5 top-3.5 h-6 w-6 cursor-copy rounded-md p-1 hover:bg-neutral-600 active:bg-neutral-700"
+        />
+      </div>
     {/each}
   </div>
 </div>
 
 <style lang="scss">
   .container-box {
-    @apply rounded-md bg-neutral-800 px-1 py-2 md:p-3 transition-all hover:bg-neutral-700 hover:shadow-md;
+    @apply rounded-md bg-neutral-800 px-1 py-2 transition-all hover:bg-neutral-700 hover:shadow-md md:p-3;
   }
 </style>

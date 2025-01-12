@@ -44,9 +44,9 @@
     },
     {
       title: 'Throne',
-      placeholder: 'Coming soon...',
+      link: 'https://throne.com/willowwould',
       icon: Throne,
-      active: false,
+      active: true,
     },
   ];
 

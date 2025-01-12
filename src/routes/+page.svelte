@@ -70,7 +70,7 @@
     },
     {
       name: 'Solana',
-      notes: 'Including compatible tokens like USDC',
+      notes: 'Including tokens',
       address: 'HFKvNd95hXVRpT6CMiNdGneQtXbVomNYYWKfYHLPvzgW',
     },
     {
@@ -91,7 +91,7 @@
     return svg;
   });
 
-  let openCurrency = $state<number | null>(0);
+  let openCurrency = $state<number | null>(null);
 
   function toggleOpen(index: number) {
     openCurrency === index ? (openCurrency = null) : (openCurrency = index);
@@ -119,7 +119,7 @@
   }
 </script>
 
-<div class="p-4">
+<div class="p-4 md:max-w-screen-md">
   <h1>WillowWould</h1>
 
   <h2>Conventional</h2>
@@ -143,7 +143,12 @@
   </div>
 
   <h2>Crypto</h2>
-  <div class="grid grid-cols-2 gap-4 px-5 md:grid-cols-2">
+  <p class="mb-4">
+    DM @WillowWould, @WillowWouldnt, or @sometempusernam on twitter (or bsky)
+    with a screenshot of the transaction after sending crypto if you are
+    sending for a specific reason. Donations don't need this &lt;3
+  </p>
+  <div class="grid grid-cols-1 gap-4 px-5 md:grid-cols-2">
     {#each cryptoCurrencies as currency, index}
       {@const open = openCurrency === index}
       <div

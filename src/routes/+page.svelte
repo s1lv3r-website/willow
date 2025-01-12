@@ -10,17 +10,30 @@
   import type { Component } from 'svelte';
   import { Clipboard } from 'lucide-svelte';
 
-  type ActiveSite = {
+  type Site = {
+    /** The string to show for the button */
     title: string;
+
+    /** Where to go after clicking the button */
     link: string;
+
+    /** The site's icon */
     icon: Component;
+
+    /** If the link should work or not */
+    active: boolean;
+  }
+  type ActiveSite = Site & {
     active: true;
   };
-  type DisabledSite = {
-    title: string;
-    placeholder?: string;
-    icon?: Component;
+  type DisabledSite = Site & {
     active: false;
+
+    /** A popup string to show in case the site is disabled*/
+    placeholder?: string;
+
+    link?: string;
+    icon?: Component;
   };
 
   const conventionalSites: (ActiveSite | DisabledSite)[] = [
